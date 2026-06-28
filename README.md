@@ -374,7 +374,7 @@ VITE_BIRTHDAY_AGE="25"
 VITE_BIRTHDAY_GENDER="female"
 VITE_BIRTHDAY_DATE="2026-10-15"
 VITE_BIRTHDAY_RELATIONSHIP="partner"
-VITE_BIRTHDAY_WISHER_NAME="Alex"
+VITE_BIRTHDAY_WISHER_NAME="Umer"
 VITE_FAVORITE_COLOR="#00C2FF"
 VITE_FAVORITE_ITEMS="coffee, stars, music"
 VITE_CUSTOM_MESSAGE="You mean the universe to me."
@@ -974,3 +974,5 @@ As we reach the conclusion of this master documentation, we want to remind you t
 </div>
 
 **[Back to Top ↑](#-birthday-bloom--advanced-animated-birthday-website-generator)**
+#   U m m i - s - B i r t h d a y  
+ 
