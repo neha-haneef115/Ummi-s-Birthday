@@ -7,7 +7,19 @@ export const VideoGallery = () => {
   const isMobile = useIsMobile();
   const photos = config.photos || [];
 
-  if (!photos || photos.length === 0) return null;
+  // Fallback to local assets if no photos provided
+  const fallbackPhotos = [
+    '/assets/birthday/1.jpeg',
+    '/assets/birthday/2.jpeg',
+    '/assets/birthday/3.jpeg',
+    '/assets/birthday/4.jpeg',
+    '/assets/birthday/5.jpeg',
+    '/assets/birthday/6.jpeg',
+  ];
+
+  const displayPhotos = photos.length > 0 ? photos : fallbackPhotos;
+
+  if (!displayPhotos || displayPhotos.length === 0) return null;
 
   return (
     <section className="relative z-20 px-4 py-20 max-w-7xl mx-auto w-full">
@@ -22,7 +34,7 @@ export const VideoGallery = () => {
       </motion.h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl mx-auto">
-        {photos.map((url, i) => (
+        {displayPhotos.map((url, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, scale: 0.9, y: 50 }}
