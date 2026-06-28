@@ -395,7 +395,7 @@ export class ConfigValidator {
         theme: userConfig.personalization?.theme || THEME_TYPES.FUN,
         favoriteColor: userConfig.personalization?.favoriteColor || '#FF6B6B',
         favoriteEmojis: userConfig.personalization?.favoriteEmojis || ['🎉', '✨', '💕'],
-        customMessage: userConfig.personalization?.customMessage || 'Happy Birthday!',
+        customMessage: userConfig.personalization?.customMessage || '',
         interests: userConfig.personalization?.interests || [],
         hobbies: userConfig.personalization?.hobbies || [],
       },

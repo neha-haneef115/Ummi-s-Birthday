@@ -5,9 +5,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export const VideoGallery = () => {
   const { config } = useBirthdayStore();
   const isMobile = useIsMobile();
-  const videos = config.videos || [];
+  const photos = config.photos || [];
 
-  if (!videos || videos.length === 0) return null;
+  if (!photos || photos.length === 0) return null;
 
   return (
     <section className="relative z-20 px-4 py-20 max-w-7xl mx-auto w-full">
@@ -21,49 +21,25 @@ export const VideoGallery = () => {
         SPECIAL MEMORIES 🎬
       </motion.h3>
 
-      <div className="flex flex-col gap-12 w-full max-w-4xl mx-auto">
-        {videos.map((url, i) => {
-          let embedUrl = url;
-          const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-          const isVideoFile = url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('.mp4?');
-          
-          if (isYouTube && url.includes('watch?v=')) {
-            embedUrl = url.replace('watch?v=', 'embed/').split('&')[0];
-          } else if (isYouTube && url.includes('youtu.be/')) {
-            embedUrl = url.replace('youtu.be/', 'youtube.com/embed/').split('?')[0];
-          }
-
-          return (
-            <motion.div
-              key={i}
-              initial={isMobile ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.9, y: 50 }}
-              whileInView={isMobile ? undefined : { opacity: 1, scale: 1, y: 0 }}
-              viewport={isMobile ? undefined : { once: true, margin: "-50px" }}
-              transition={{ duration: isMobile ? 1.2 : 0.8, delay: i * 0.2, ease: "easeOut" }}
-              className="relative aspect-video rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 bg-black/50 backdrop-blur-xl group"
-            >
-              {isVideoFile ? (
-                <video 
-                  src={url} 
-                  controls 
-                  playsInline
-                  loading="lazy"
-                  className="w-full h-full object-contain"
-                  preload="metadata"
-                />
-              ) : (
-                <iframe
-                  src={embedUrl}
-                  loading="lazy"
-                  className="w-full h-full border-none"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title={`Video memory ${i + 1}`}
-                ></iframe>
-              )}
-            </motion.div>
-          );
-        })}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl mx-auto">
+        {photos.map((url, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 0.9, y: 50 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
+            className="relative aspect-square rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 bg-black/50 backdrop-blur-xl group"
+          >
+            <img
+              src={url}
+              alt={`Memory ${i + 1}`}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </motion.div>
+        ))}
       </div>
     </section>
   );

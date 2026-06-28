@@ -3,9 +3,6 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { PHOTO_ASSETS } from "@/config/birthday";
 import { useBirthdayStore } from "@/features/core/store/useBirthdayStore";
 import { useIsMobile } from "@/hooks/use-mobile";
-import photo1Default from "@/assets/photo-1.jpg";
-import photo2Default from "@/assets/photo-2.jpg";
-import photo3Default from "@/assets/photo-3.jpg";
 
 export const PhotoGallery = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -25,37 +22,20 @@ export const PhotoGallery = () => {
   const photos = useMemo(() => {
     const envPhotos = config.photos?.map((src, index) => ({
       src,
-      fallback: [photo1Default, photo2Default, photo3Default][index % 3],
       key: `env-${index}`,
     })) ?? [];
 
-    const base = envPhotos.length > 0
-      ? envPhotos
-      : [
-          { src: PHOTO_ASSETS.photo1 || photo1Default, fallback: photo1Default, key: "p1" },
-          { src: PHOTO_ASSETS.photo2 || photo2Default, fallback: photo2Default, key: "p2" },
-          { src: PHOTO_ASSETS.photo3 || photo3Default, fallback: photo3Default, key: "p3" },
-        ].filter(p => p.src !== null);
-
-    const captions = relationship === 'partner' ? [
-      "Every moment with you is a gift 💖",
-      "Building our beautiful future ✨",
-      "My heart's favorite place 🌹"
-    ] : relationship === 'friend' ? [
-      "Legendary times with the MVP 🚀",
-      "Making memories and bad decisions! 😂",
-      "Stay epic, stay you! 🍻"
-    ] : [
-      "Family is where life begins ✨",
-      "Cherishing every smile 💖",
-      "A journey filled with love 🌟"
+    const captions = [
+      "Our favorite memory",
+      "A day worth keeping",
+      "The smile that says everything"
     ];
 
-    return base.map((p, i) => ({
+    return envPhotos.map((p, i) => ({
       ...p,
       caption: config.photoCaptions?.[i] || captions[i] || "Beautiful memory",
     }));
-  }, [relationship, config.photos, config.photoCaptions]);
+  }, [config.photos, config.photoCaptions]);
 
   // 3D Tilt Effect
   const x = useMotionValue(0);
@@ -151,7 +131,6 @@ export const PhotoGallery = () => {
                 src={photos[activeIndex].src}
                 alt={photos[activeIndex].caption}
                 onLoad={(e) => handleImageLoad(photos[activeIndex].key, e)}
-                onError={(e) => { (e.target as HTMLImageElement).src = photos[activeIndex].fallback; }}
                 loading="lazy"
                 className={`w-full h-full object-cover transition-transform [transition-duration:3000ms] ${!isMobile ? "group-hover:scale-110" : ""}`}
               />
@@ -206,7 +185,7 @@ export const PhotoGallery = () => {
               whileTap={{ scale: 0.9 }}
               className={`relative cursor-pointer rounded-3xl overflow-hidden w-28 h-28 md:w-40 md:h-40 border-4 transition-all duration-700 ${i === activeIndex ? "border-primary scale-110 shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.4)]" : "border-transparent opacity-30 hover:opacity-100"}`}
             >
-              <img src={photo.src} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = photo.fallback; }} />
+              <img src={photo.src} className="w-full h-full object-cover" />
               {i === activeIndex && (
                 <motion.div 
                   layoutId="active-thumb-glow"

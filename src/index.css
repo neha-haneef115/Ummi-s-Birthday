@@ -379,15 +379,15 @@
 
 @keyframes candle-flicker {
   0% {
-    transform: scaleY(1) scaleX(1) skewX(0deg);
+    transform: scaleY(1) scUmer(1) skewX(0deg);
   }
 
   50% {
-    transform: scaleY(0.95) scaleX(1.05) skewX(-2deg);
+    transform: scaleY(0.95) scUmer(1.05) skewX(-2deg);
   }
 
   100% {
-    transform: scaleY(1) scaleX(1) skewX(0deg);
+    transform: scaleY(1) scUmer(1) skewX(0deg);
   }
 }
 

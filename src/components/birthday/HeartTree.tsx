@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useBirthdayStore } from "@/features/core/store/useBirthdayStore";
 import { useConfetti } from "./Confetti";
 import { useSoundManager } from "./SoundManager";
-import { SPECIAL_QUOTES } from "@/config/templates";
 
 interface HeartTreeProps {
     delay?: number; 
@@ -55,10 +54,15 @@ export const HeartTree = ({ delay = 1000 }: HeartTreeProps) => {
     const { playReveal, playPop } = useSoundManager();
 
     const quotesPool = useMemo(() => {
-        if (relationship === 'partner') return SPECIAL_QUOTES.partner[gender as 'male' | 'female'] || SPECIAL_QUOTES.family;
-        if (relationship === 'friend') return (gender === 'male' ? SPECIAL_QUOTES.friend.legend : SPECIAL_QUOTES.friend.friendly) || SPECIAL_QUOTES.family;
-        return SPECIAL_QUOTES.family;
-    }, [relationship, gender]);
+        const quotes = [
+            "May your birthday be filled with love and joy! 💖",
+            "Wishing you all the happiness in the world! ✨",
+            "You make the world a better place! 🌟",
+            "Here's to another amazing year! 🎉",
+            "Celebrating you today and always! 🎂"
+        ];
+        return quotes;
+    }, []);
 
     useEffect(() => {
         const t1 = setTimeout(() => setStage(1), delay);

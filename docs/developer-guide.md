@@ -812,7 +812,7 @@ const mom = createFamilyMemberProfile('mother', 'Mom', new Date('1968-09-12'));
 import { getHighlySpecificLetter, getBigWishes, getInterestBasedTheme } from '@/features/core/store/SuperPersonalizedLogic';
 
 const letter = getHighlySpecificLetter("Sarah", "partner", "female", ["music", "art"]);
-const wishes = getBigWishes("Alex", "friend", "male", ["gaming"]);
+const wishes = getBigWishes("Umer", "friend", "male", ["gaming"]);
 const theme = getInterestBasedTheme(["car"]); // "automotive"
 ```
 

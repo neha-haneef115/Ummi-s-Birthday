@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { EMOTIONAL_LETTERS } from '@/config/templates';
 import { RelationshipType, GenderType } from './useBirthdayStore';
 
 export const getHighlySpecificLetter = (
@@ -13,27 +12,21 @@ export const getHighlySpecificLetter = (
 
   // 1. Partner Case
   if (relationship === 'partner') {
-    return isFemale ? EMOTIONAL_LETTERS.partner.female : EMOTIONAL_LETTERS.partner.male;
+    return isFemale 
+      ? `My dearest ${name},\n\nYou are the light of my life and the beat of my heart. Every moment with you is a treasure I hold close. Today, I celebrate not just your birthday, but the incredible person you are—the one who makes my world brighter just by being in it.\n\nHappy Birthday, my love. 💖`
+      : `My dear ${name},\n\nYou are my rock, my partner, and my best friend. Your strength and kindness inspire me every single day. I'm so grateful to have you by my side through all of life's adventures.\n\nHappy Birthday, my love. 💙`;
   }
 
   // 2. Friend Case (with gender-specific nuances)
   if (relationship === 'friend') {
-    if (isFemale) return EMOTIONAL_LETTERS.friend.friendly; // "Bestie" style
-    if (isMale) return EMOTIONAL_LETTERS.friend.legend; // "Legend" style
-    return EMOTIONAL_LETTERS.friend.romantic; // Neutral/Romantic fallback
+    if (isMale) {
+      return `Hey ${name},\n\nYou're not just a friend—you're a legend. Thanks for always being there, for the laughs, the adventures, and for being the kind of person everyone can count on. The world is better with you in it.\n\nHappy Birthday, brother! 🚀`;
+    }
+    return `Hey ${name},\n\nYou're the kind of friend everyone wishes for. Thank you for the memories, the support, and for always being real. Here's to many more years of friendship and unforgettable moments.\n\nHappy Birthday, bestie! ✨`;
   }
 
-  // 3. Sibling Case
-  if (relationship === 'sibling') {
-    return EMOTIONAL_LETTERS.sibling;
-  }
-
-  // 4. Colleague / Mentor
-  if (relationship === 'colleague') return EMOTIONAL_LETTERS.colleague;
-  if (relationship === 'mentor') return EMOTIONAL_LETTERS.mentor;
-
-  // 5. Family (Default Fallback)
-  return EMOTIONAL_LETTERS.family;
+  // 3. Family (Default Fallback)
+  return `Dear Umer,\n\n Thank you for being there whenever I needed you most, both in good times and bad times. You helped me realize that I should love myself the way I deserve. I still wonder how a person can care the way you do. I don't think any of my friends would understand me or care for me the way you do. You've raised the bar, man!❤️.\n\nHappy Birthday! 🎂`;
 };
 
 export const getInterestBasedTheme = (interests: string[]) => {

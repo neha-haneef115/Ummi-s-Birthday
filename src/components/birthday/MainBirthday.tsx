@@ -9,28 +9,24 @@
  * Licensed under MIT for community use, but original authorship must be preserved.
  */
 
-import { useState, useEffect, useRef, useMemo } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useConfetti } from "./Confetti";
 import { Balloons } from "./Balloons";
 import { Sparkles } from "./Sparkles";
-import { PhotoGallery } from "./PhotoGallery";
 import { HeartProgression } from "./HeartProgression";
 import { TypeWriter } from "./TypeWriter";
 import { useSoundManager } from "./SoundManager";
 import { CakeCutting } from "./CakeCutting";
-import { HeartTree } from "./HeartTree";
 import { FireflyEffect } from "./FireflyEffect";
 import { FloatingOrbs } from "./FloatingOrbs";
 import { ShootingStars } from "./ShootingStars";
-import { BirthdayQuiz } from "./BirthdayQuiz";
-import { FinalSurprise } from "./FinalSurprise";
 import { GlitchEffect } from "./GlitchEffect";
 import { VideoGallery } from "./VideoGallery";
 import { useBirthdayStore } from "@/features/core/store/useBirthdayStore";
-import { getHighlySpecificLetter, getBigWishes } from "@/features/core/store/SuperPersonalizedLogic";
-import { Car, Music, Code, Gamepad2, Palmtree, Camera, Pizza, Dumbbell, Rocket, Heart, Trophy, Star, LucideIcon } from "lucide-react";
+import { getHighlySpecificLetter } from "@/features/core/store/SuperPersonalizedLogic";
+import { Car, Music, Code, Gamepad2, Palmtree, Camera, Pizza, Dumbbell, Rocket, Heart, Trophy, LucideIcon } from "lucide-react";
 
 const interestIcons: Record<string, LucideIcon> = {
   car: Car,
@@ -52,8 +48,6 @@ export const MainBirthday = () => {
   const [emojis, setEmojis] = useState<{ id: number; emoji: string; x: number }[]>([]);
   const [cakeClicks, setCakeClicks] = useState(0);
   const [megaSurprise, setMegaSurprise] = useState(false);
-  const [giftStage, setGiftStage] = useState<'closed' | 'party' | 'open'>('closed');
-  const giftTimerRef = useRef<number | null>(null);
   
   const { fireConfetti, fireCannon, fireStars } = useConfetti();
   const { playReveal, playPop, playBoom, playWhoosh, setBgVolume } = useSoundManager();
@@ -67,29 +61,6 @@ export const MainBirthday = () => {
   const mood = getMood();
   const letterSignoff = senderName ? `\n\nWith love,\n${senderName}` : '';
   const primaryColor = favoriteColor || '#FF6B6B';
-  const bigWishes = useMemo(() => getBigWishes(name, relationship, gender, config.interests || []), [name, relationship, gender, config.interests]);
-
-  const specialCode = useMemo(() => {
-    const template = relationship === 'partner' ? 'LOVE' : relationship === 'friend' ? 'LEGEND' : 'HOME';
-    const interestMap = [
-      { key: 'car', code: 'RIDE' },
-      { key: 'music', code: 'BEATS' },
-      { key: 'coding', code: 'CODE' },
-      { key: 'gaming', code: 'PLAY' },
-      { key: 'travel', code: 'TRIP' },
-      { key: 'food', code: 'FEAST' },
-      { key: 'art', code: 'ART' },
-      { key: 'space', code: 'STAR' },
-      { key: 'nature', code: 'BLOOM' },
-    ];
-    const matchedInterest = config.interests?.map((interest) => interest.toLowerCase().trim()).find((interest) =>
-      interestMap.some((item) => interest.includes(item.key))
-    );
-    const interestTag = matchedInterest
-      ? interestMap.find((item) => matchedInterest.includes(item.key))?.code
-      : 'SPARK';
-    return `${template}-${interestTag}-${String(new Date().getFullYear()).slice(-2)}`;
-  }, [relationship, config.interests]);
 
   // Magnetic Effect for Buttons
   const mouseX = useMotionValue(0);
@@ -105,25 +76,6 @@ export const MainBirthday = () => {
     mouseX.set(moveX);
     mouseY.set(moveY);
   };
-
-  const openGift = () => {
-    if (giftStage !== 'closed') return;
-    setGiftStage('party');
-    playBoom();
-    fireConfetti();
-    fireStars();
-    if (giftTimerRef.current) window.clearTimeout(giftTimerRef.current);
-    giftTimerRef.current = window.setTimeout(() => {
-      setGiftStage('open');
-      giftTimerRef.current = null;
-    }, 2000);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (giftTimerRef.current) window.clearTimeout(giftTimerRef.current);
-    };
-  }, []);
 
   useEffect(() => {
     setBgVolume(0.4);
@@ -220,8 +172,8 @@ export const MainBirthday = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0, filter: "blur(10px)" },
-    visible: { y: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } },
+    hidden: { y: 30, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
   };
 
   const heroMotionStyle = shouldAnimate ? { x: springX, y: springY } : { x: 0, y: 0 };
@@ -320,18 +272,12 @@ export const MainBirthday = () => {
                 </motion.div>
               );
             })
-          ) : (
-            <div className="text-5xl md:text-7xl space-x-4">
-              <span>🎈</span><span>🎉</span><span>🎊</span><span>🎁</span><span>🥳</span>
-            </div>
-          )}
+          ) : null}
         </motion.div>
       </motion.section>
 
       {/* Components */}
       {/* <CakeCutting />  Move to end */}
-
-      {config.showPhotoSection && <PhotoGallery />}
 
       {/* Message Card */}
       <section className="relative z-20 flex justify-center px-4 pb-32 pt-16">
@@ -354,12 +300,12 @@ export const MainBirthday = () => {
             {relationship === 'partner' ? "From My Heart" : relationship === 'friend' ? "Legendary Message" : "A Special Message"}
           </h3>
           <div className="space-y-10 text-center text-2xl md:text-3xl text-foreground/90 leading-relaxed">
-            <p className="font-display font-black text-3xl md:text-5xl" style={{ color: primaryColor }}>Dear {name},</p>
+            
             {customMessage ? (
               <p className="italic font-light text-3xl md:text-5xl leading-tight">"{customMessage}"</p>
             ) : (
               <div className="space-y-8">
-                <p>{mood === 'romantic' ? "My world is infinitely brighter because you are in it. Today is a celebration of the most beautiful soul I know." : mood === 'energetic' ? "You're not just older, you're better. A true legend deserves an epic day!" : "Today is a day of joy and gratitude as we celebrate you. You bring so much light into our lives."}</p>
+               
                 <p className="text-xl md:text-2xl text-foreground/60">May this new chapter be your best one yet. ✨</p>
               </div>
             )}
@@ -405,152 +351,6 @@ export const MainBirthday = () => {
         </div>
       )}
 
-      {config.showQuizSection && <BirthdayQuiz />}
-
-      {/* Wishes Section */}
-      <section className="relative z-20 px-4 pb-32">
-        <h3 className="font-display text-5xl md:text-8xl font-black text-center mb-20 drop-shadow-xl" style={{ color: primaryColor }}>Wishes for You ✨</h3>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-          {bigWishes.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
-              whileHover={!isMobile ? { y: -15, scale: 1.03, rotate: i % 2 === 0 ? 1 : -1, boxShadow: `0 30px 60px -15px ${primaryColor}40` } : undefined}
-              className="p-10 backdrop-blur-3xl border cursor-pointer group bg-gradient-to-br from-white/10 to-transparent border-white/10"
-              style={{ borderRadius: 'var(--card-radius, 2.5rem)' }}
-              onClick={addEmoji}
-            >
-              <div className="text-7xl mb-8 group-hover:scale-125 transition-transform duration-500">{item.emoji}</div>
-              <p className="text-foreground/95 text-2xl md:text-4xl font-black leading-tight tracking-tight">{item.wish}</p>
-              <div className="mt-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                {[1, 2, 3].map(j => <Star key={j} size={16} className="text-primary fill-primary" />)}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {config.showGiftSection && <section className="relative z-20 px-4 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <motion.button
-            type="button"
-            onClick={openGift}
-            whileHover={shouldAnimate ? { scale: 1.02 } : undefined}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.3 }}
-            className="w-full rounded-[3rem] border border-white/10 bg-gradient-to-r from-primary/15 to-transparent p-8 text-left shadow-2xl backdrop-blur-3xl hover:border-primary/40"
-          >
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div>
-                <p className="text-2xl md:text-3xl font-display font-black text-white">🎁 Hidden Gift Code</p>
-                <p className="mt-3 text-sm md:text-base text-foreground/70 max-w-2xl leading-relaxed">
-                  The party starts first, the crowd is hyped, and only then does the gift reveal open. Tap now to trigger the tease, light the dance floor, and keep the surprise waiting for its perfect moment.
-                </p>
-              </div>
-              <div className="inline-flex h-24 w-24 items-center justify-center rounded-3xl bg-white/10 text-4xl text-white shadow-[0_15px_50px_rgba(0,0,0,0.4)]">
-                🎁
-              </div>
-            </div>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm text-white/75">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10">✨</span>
-              Your code: <span className="font-semibold text-primary">{specialCode}</span>
-            </div>
-          </motion.button>
-        </div>
-      </section>}
-
-      <AnimatePresence>
-        {giftStage !== 'closed' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-6"
-            onClick={() => setGiftStage('closed')}
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.35 }}
-              className="relative w-full max-w-3xl rounded-[2.5rem] border border-white/10 bg-black/90 p-6 sm:p-8 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)] max-h-[calc(100vh-4rem)] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {giftStage === 'party' ? (
-                <div className="flex flex-col gap-6 text-center min-h-[42vh] justify-center">
-                  <div className="text-6xl">🎂🎉✨</div>
-                  <h3 className="text-4xl md:text-6xl font-black text-white">The party is teasing the surprise!</h3>
-                  <p className="text-lg md:text-xl text-white/85 max-w-xl mx-auto leading-relaxed">
-                    The crowd is cheering, the lights are flashing, and the celebration message is made to stay visible on every screen. Watch the party tease before the gift reveal arrives.
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-                    {[
-                      { icon: '🎶', label: 'Music builds' },
-                      { icon: '🔥', label: 'Crowd hype' },
-                      { icon: '✨', label: 'Gift tease' }
-                    ].map((item) => (
-                      <div key={item.label} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
-                        <span className="mr-2">{item.icon}</span>{item.label}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mx-auto inline-flex rounded-full bg-white/10 px-6 py-4 text-2xl font-semibold text-white shadow-[0_20px_60px_-30px_rgba(255,255,255,0.4)]">
-                    Pataka mood activated.
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-6 text-center">
-                  <div className="text-5xl">🎉</div>
-                  <h3 className="text-4xl md:text-6xl font-black text-white">Surprise Unlocked!</h3>
-                  <p className="text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto">
-                    First the party sparkled, then the gift arrived. Your secret code is built from your relationship theme, your favorite interests, and a little playful mischief.
-                  </p>
-                  <div className="mx-auto inline-flex rounded-full bg-primary/10 px-6 py-4 text-2xl font-semibold text-primary shadow-[0_20px_60px_-30px_rgba(255,255,255,0.4)]">
-                    {specialCode}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => { setGiftStage('closed'); fireConfetti(); }}
-                    className="mx-auto rounded-full bg-primary px-10 py-4 text-xl font-black text-black transition-all hover:scale-105"
-                  >
-                    Close Gift
-                  </button>
-                </div>
-              )}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 to-transparent" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Magnetic Buttons Section */}
-      <section className="relative z-20 flex flex-wrap justify-center gap-8 px-4 pb-32">
-        {[
-          { label: "🎊 Cannon!", color: primaryColor, action: fireCannon },
-          { label: "🎈 Party!", color: "hsl(45, 100%, 50%)", action: fireConfetti },
-          { label: "💫 Love!", color: "hsl(200, 80%, 50%)", action: () => { for (let i = 0; i < 5; i++) setTimeout(addEmoji, i * 200); } }
-        ].map((btn, i) => (
-          <motion.button
-            key={i}
-            whileHover={shouldAnimate ? { scale: 1.15, rotate: i % 2 === 0 ? 3 : -3 } : undefined}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => { btn.action(); addEmoji(); }}
-            className="px-12 py-6 rounded-full text-2xl font-black text-white shadow-2xl transition-all"
-            style={{ 
-              background: `linear-gradient(135deg, ${btn.color}, ${btn.color}dd)`,
-              boxShadow: `0 15px 45px -10px ${btn.color}60` 
-            }}
-          >
-            {btn.label}
-          </motion.button>
-        ))}
-      </section>
-
-      {config.showHeartTreeSection && <HeartTree delay={500} />}
-      
       {config.showVideoSection && <VideoGallery />}
 
       {/* Cake Cutting Section */}
@@ -586,13 +386,7 @@ export const MainBirthday = () => {
       </section>
       )}
 
-      {config.showFinalSurprise && <FinalSurprise />}
-
-      <footer className="relative z-20 text-center py-20 bg-black/40 w-full">
-        <p className="mt-4 text-white/10 text-[10px] tracking-[0.5em] uppercase">
-          Crafted by NABORAJ SARKAR — Cinematic Engine v2.5
-        </p>
-      </footer>
+      
     </div>
   );
 };

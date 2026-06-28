@@ -48,7 +48,7 @@ export const RibbonEffect = ({ text = "Happy Birthday", color = "#FF6B6B" }) => 
           style={{
             background: `linear-gradient(to bottom, ${color}88, transparent)`,
             clipPath: "polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 50%)",
-            transform: "scaleX(-1)",
+            transform: "scUmer(-1)",
           }}
           animate={{ rotate: [0, -5, 0] }}
           transition={{ duration: 3, repeat: Infinity }}

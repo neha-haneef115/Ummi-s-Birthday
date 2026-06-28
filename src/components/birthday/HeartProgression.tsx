@@ -259,7 +259,7 @@ const FourCornerMerge = ({ onDone }: { onDone: () => void }) => {
       {showText && (
         <div className="z-40 mt-2 animate-love-text-reveal text-center px-4">
           <span className="font-display text-xl sm:text-2xl md:text-5xl font-black bg-gradient-to-r from-[hsl(330,85%,65%)] via-[hsl(350,90%,70%)] to-[hsl(330,85%,60%)] bg-clip-text text-transparent animate-glow-pulse whitespace-nowrap leading-normal">
-            {`Love You Dear ${name || 'One'}`}
+            {`Happy Birthday ${name || 'Umer'}`}
           </span>
         </div>
       )}
